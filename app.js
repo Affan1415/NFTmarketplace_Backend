@@ -1,23 +1,24 @@
 // const fs = require("fs");
-// const express = require("express");
+const express = require("express");
 
-// const app = express();
+const app = express();
+
 // app.use(express.json());
 
 // const nfts = JSON.parse(
 //   fs.readFileSync(`${__dirname}/nft-data/data/nft-simple.json`)
 // );
 
-// // app.get("/", (req, res) => {
-// //   res.status(200).send("Hellow i am nft marketplace api");
-// // });
+// app.get("/", (req, res) => {
+//   res.status(200).send("Hellow i am nft marketplace api");
+// });
 
-// // app.get("/", (req, res) => {
-// //   res.status(200).json({
-// //     message: "Hellow i am nft marketplace api",
-// //     api: "NFT Marketplace",
-// //   });
-// // });
+app.get("/", (req, res) => {
+  res.status(200).json({
+    message: "Hellow i am nft marketplace api",
+    api: "NFT Marketplace",
+  });
+});
 
 // // app.post("/", (req, res) => {
 // //   res.status(201).json({
@@ -121,10 +122,10 @@
 //   });
 // });
 
-// const port = 3000;
-// app.listen(port, () => {
-//   console.log(`App running on port ${port}....`);
-// });
+const port = 3000;
+app.listen(port, () => {
+  console.log(`App running on port ${port}....`);
+});
 
 // /////PART 2 -----------------------
 
@@ -416,34 +417,34 @@
 
 /////PART 4 -----------------------
 
-const express = require("express");
-const morgan = require("morgan");
+// const express = require("express");
+// const morgan = require("morgan");
 
-const nftsRouter = require("./routes/nftsRoute");
-const usersRouter = require("./routes/usersRoute");
+// const nftsRouter = require("./routes/nftsRoute");
+// const usersRouter = require("./routes/usersRoute");
 
-const app = express();
-app.use(express.json());
+// const app = express();
+// app.use(express.json());
 
 // if (process.env.NODE_ENV === "development ") {
 //   app.use(morgan("dev"));
 // }
-app.use(morgan("dev"));
-//SERVING TEMPLATE DEMO
-app.use(express.static(`${__dirname}/nft-data/img`));
+// app.use(morgan("dev"));
+// //SERVING TEMPLATE DEMO
+// app.use(express.static(`${__dirname}/nft-data/img`));
 
-//CUSTOM MIDDLE WARE
-app.use((req, res, next) => {
-  console.log("Hey i am from middleware function 👋");
-  next();
-});
+// //CUSTOM MIDDLE WARE
+// app.use((req, res, next) => {
+//   console.log("Hey i am from middleware function 👋");
+//   next();
+// });
 
-app.use((req, res, next) => {
-  req.requestTime = new Date().toISOString();
-  next();
-});
+// app.use((req, res, next) => {
+//   req.requestTime = new Date().toISOString();
+//   next();
+// });
 
-app.use("/api/v1/nfts", nftsRouter);
-app.use("/api/v1/users", usersRouter);
+// app.use("/api/v1/nfts", nftsRouter);
+// app.use("/api/v1/users", usersRouter);
 
-module.exports = app;
+// module.exports = app;
