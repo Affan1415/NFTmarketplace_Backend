@@ -1,30 +1,30 @@
 // const fs = require("fs");
 const express = require("express");
 
-const app = express();
+const app = express();//this variable app has all the functionality of express
 
 // app.use(express.json());
 
 // const nfts = JSON.parse(
 //   fs.readFileSync(`${__dirname}/nft-data/data/nft-simple.json`)
 // );
-
+////.get from express allow us to make a request on the api to get the dat("/"means the main domain (URL),take the(qurrey the user making ,response of the server))
 // app.get("/", (req, res) => {
 //   res.status(200).send("Hellow i am nft marketplace api");
 // });
-
-app.get("/", (req, res) => {
-  res.status(200).json({
-    message: "Hellow i am nft marketplace api",
-    api: "NFT Marketplace",
-  });
-});
-
-// // app.post("/", (req, res) => {
-// //   res.status(201).json({
-// //     message: "Your data",
-// //   });
-// // });
+////sending data in the form of object json
+// app.get("/", (req, res) => {
+//   res.status(200).json({
+//     message: "Hellow i am nft marketplace api",
+//     api: "NFT Marketplace",
+//   });
+// });
+////post write any document
+// app.post("/", (req, res) => {
+//   res.status(201).json({
+//     message: "Your data",
+//   });
+// });
 
 // //GET REQUEST
 
@@ -122,7 +122,8 @@ app.get("/", (req, res) => {
 //   });
 // });
 
-const port = 3000;
+const port = 3000;//crated the port for server
+//app.listen is how we create server in express(a port on which we want to create a server,call back functions)
 app.listen(port, () => {
   console.log(`App running on port ${port}....`);
 });
