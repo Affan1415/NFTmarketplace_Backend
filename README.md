@@ -2,3 +2,4 @@
 >>npm install express@4.18.1(intsall express)
 >>npm install -g nodemon(global nodes)
 >>nodemon app.js (to start the server,automatically refresh when u save the code changes)
+>>npm install morgan express(allow to identify what request user are making on your API if i want to some event on that request use this package and trigger that event)
