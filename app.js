@@ -361,60 +361,61 @@ const deleteNFT = (req, res) => {
 };
 
 // ///------USERS
-// const getAllUsers = (req, res) => {
-//   res.status(500).json({
-//     status: "error",
-//     message: "Internal server error",
-//   });
-// };
+const getAllUsers = (req, res) => {
+  res.status(500).json({
+    status: "error",
+    message: "Internal server error",
+  });
+};
 
-// const createUser = (req, res) => {
-//   res.status(500).json({
-//     status: "error",
-//     message: "Internal server error",
-//   });
-// };
+const createUser = (req, res) => {
+  res.status(500).json({
+    status: "error",
+    message: "Internal server error",
+  });
+};
 
-// const getSingleUser = (req, res) => {
-//   res.status(500).json({
-//     status: "error",
-//     message: "Internal server error",
-//   });
-// };
+const getSingleUser = (req, res) => {
+  res.status(500).json({
+    status: "error",
+    message: "Internal server error",
+  });
+};
 
-// const updateUser = (req, res) => {
-//   res.status(500).json({
-//     status: "error",
-//     message: "Internal server error",
-//   });
-// };
+const updateUser = (req, res) => {
+  res.status(500).json({
+    status: "error",
+    message: "Internal server error",
+  });
+};
 
-// const deleteUser = (req, res) => {
-//   res.status(500).json({
-//     status: "error",
-//     message: "Internal server error",
-//   });
-// };
+const deleteUser = (req, res) => {
+  res.status(500).json({
+    status: "error",
+    message: "Internal server error",
+  });
+};
+//>>splitting the code 
+//>>if any request made it will first hit these routers and thenhit the otehr routers
+const nftsRouter = express.Router();
+const usersRouter = express.Router();
 
-// const nftsRouter = express.Router();
-// const usersRouter = express.Router();
+//ROUTER NFTs
+nftsRouter.route("/").get(getAllNfts).post(createNFT);
 
-// //ROUTER NFTs
-// nftsRouter.route("/").get(getAllNfts).post(createNFT);
+nftsRouter.route("/:id").get(getSingleNFT).patch(updateNFT).delete(deleteNFT);
 
-// nftsRouter.route("/:id").get(getSingleNFT).patch(updateNFT).delete(deleteNFT);
+//ROUTERS USERS
+usersRouter.route("/").get(getAllUsers).post(createUser);
 
-// //ROUTERS USERS
-// usersRouter.route("/").get(getAllUsers).post(createUser);
+usersRouter
+  .route("/:id")
+  .get(getSingleUser)
+  .patch(updateUser)
+  .delete(deleteUser);
 
-// usersRouter
-//   .route("/:id")
-//   .get(getSingleUser)
-//   .patch(updateUser)
-//   .delete(deleteUser);
-
-// app.use("/api/v1/nfts", nftsRouter);
-// app.use("/api/v1/users", usersRouter);
+app.use("/api/v1/nfts", nftsRouter);
+app.use("/api/v1/users", usersRouter);
 
 const port = 3000;
 app.listen(port, () => {
