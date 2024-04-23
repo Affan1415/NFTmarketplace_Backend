@@ -3,3 +3,13 @@
 >>npm install -g nodemon(global nodes)
 >>nodemon app.js (to start the server,automatically refresh when u save the code changes)
 >>npm install morgan express(allow to identify what request user are making on your API if i want to some event on that request use this package and trigger that event)
+>>npm i dotenv(to read from the .env file)
+
+
+
+>>start application:
+(development)
+npm start
+(production)
+npm install -g win-node-env(first install)
+npm run start:prod

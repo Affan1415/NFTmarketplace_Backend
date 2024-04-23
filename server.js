@@ -1,15 +1,11 @@
-
-const app = require("./app");
-const port = 3000;
-app.listen(port, () => {
-  console.log(`App running on port ${port}....`);
-});
-
-// const dotenv = require("dotenv");
+const dotenv = require("dotenv");
 // const mongoose = require("mongoose");
-// const app = require("./app");
-
-// dotenv.config({ path: "./config.env" });
+const app = require("./app");
+//>>enviornemnet variable
+//console.log(app.get("env"));
+//>>we have all the env in process.env dic name all the passwords blah blah
+dotenv.config({ path: "./config.env" });
+//console.log(process.env);
 // const DB = process.env.DATABASE.replace(
 //   "<PASSWORD>",
 //   process.env.DATABASE_PASSWORD
@@ -61,7 +57,7 @@ app.listen(port, () => {
 
 // // const NFT = mongoose.model("NFT", nftSchema);
 
-// const port = process.env.PORT || 3000;
-// app.listen(port, () => {
-//   console.log(`App running on port ${port}....`);
-// });
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`App running on port ${port}....`);
+});

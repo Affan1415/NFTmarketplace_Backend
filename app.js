@@ -6,13 +6,14 @@ const usersRouter = require("./routes/usersRoute");
 
 const app = express();
 app.use(express.json());
-
-// if (process.env.NODE_ENV === "development ") {
-//   app.use(morgan("dev"));
-// }
-app.use(morgan("dev"));
-// //SERVING TEMPLATE DEMO
-// app.use(express.static(`${__dirname}/nft-data/img`));
+//>>onli in the development variable
+if (process.env.NODE_ENV === "development ") {
+  app.use(morgan("dev"));
+}
+// app.use(morgan("dev"));
+//SERVING TEMPLATE DEMO
+//>>serving static file thats way we can serve pur template too
+app.use(express.static(`${__dirname}/nft-data/img`));
 
 //CUSTOM MIDDLE WARE
 app.use((req, res, next) => {
