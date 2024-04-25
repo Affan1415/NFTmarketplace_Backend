@@ -10,7 +10,7 @@ const nftControllers = require("./../controllers/nftControllers");
 // } = require("./../controllers/nftControllers");
 
 const router = express.Router();
-router.param("id", nftControllers.checkId);
+//router.param("id", nftControllers.checkId);
 //>>so whenever we got the id its only work for nfts not for user as it is onli defined in nftrouter
 // router.param("id",(req,res,next,value)=>{
 //   console.log(`ID: ${value}`);
@@ -32,8 +32,8 @@ router
   .route("/")
   .get(nftControllers.getAllNfts)
   //>>we have to check if user providing all data before creating nft
-  .post(nftControllers.checkBody, nftControllers.createNFT);
-  //.post(nftControllers.createNFT);
+  //.post(nftControllers.checkBody, nftControllers.createNFT);
+  .post(nftControllers.createNFT);
 
 router
   .route("/:id")

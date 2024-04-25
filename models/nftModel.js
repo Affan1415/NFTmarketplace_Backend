@@ -1,3 +1,5 @@
+
+//>>if we ever create any data or uplaod any data it will go throug this model
 const mongoose = require("mongoose");
 const slugify = require("slugify");
 const validator = require("validator");
@@ -8,77 +10,77 @@ const nftSchema = new mongoose.Schema(
       type: String,
       required: [true, "A NFT must have a name"],
       unique: true,
-      trim: true,
-      maxlength: [40, "nft must have 40 character"],
-      minlength: [10, "nft must have 10 character"],
+      //trim: true,
+      //maxlength: [40, "nft must have 40 character"],
+      //minlength: [10, "nft must have 10 character"],
       // validate: [validator.isAlpha, "NFT name must only contain Characters"],
     },
-    slug: String,
-    duration: {
-      type: String,
-      required: [true, "must provide duration"],
-    },
-    maxGroupSize: {
-      type: Number,
-      required: [true, "must have a group size"],
-    },
-    difficulty: {
-      type: String,
-      required: [true, "must have difficulty"],
-      enum: {
-        values: ["easy", "medium", "difficulty"],
-        message: "Difficulty is either: easy, medium and difficulty",
-      },
-    },
-    ratingsAverage: {
-      type: Number,
-      default: 4.5,
-      min: [1, "must have 1"],
-      max: [5, "must have 5"],
-    },
-    ratingsQuantity: {
-      type: Number,
-      default: 0,
-    },
+    // slug: String,
+    // duration: {
+    //   type: String,
+    //   required: [true, "must provide duration"],
+    // },
+    // maxGroupSize: {
+    //   type: Number,
+    //   required: [true, "must have a group size"],
+    // },
+    // difficulty: {
+    //   type: String,
+    //   required: [true, "must have difficulty"],
+    //   enum: {
+    //     values: ["easy", "medium", "difficulty"],
+    //     message: "Difficulty is either: easy, medium and difficulty",
+    //   },
+    // },
+    // ratingsAverage: {
+    //   type: Number,
+    //   default: 4.5,
+    //   min: [1, "must have 1"],
+    //   max: [5, "must have 5"],
+    // },
+    // ratingsQuantity: {
+    //   type: Number,
+    //   default: 0,
+    // },
     price: {
       type: Number,
       required: [true, "A NFT must have price"],
     },
-    priceDiscount: {
-      //THIS CAN ONLY WORK AT THE TIME OF CREATE not update
-      type: Number,
-      validate: {
-        validator: function (val) {
-          return val < this.price; // 200 > 100  20 < 100
-        },
-        message: "Discount price ({VALUE}) should be below regular price",
-      },
-    },
-    summary: {
-      type: String,
-      trim: true,
-      required: [true, "must provide the summary"],
-    },
-    description: {
-      type: String,
-      trim: true,
-    },
-    imageCover: {
-      type: String,
-      required: [true, "must provide the cover image"],
-    },
-    images: [String],
+    // priceDiscount: {
+    //   //THIS CAN ONLY WORK AT THE TIME OF CREATE not update
+    //   type: Number,
+    //   validate: {
+    //     validator: function (val) {
+    //       return val < this.price; // 200 > 100  20 < 100
+    //     },
+    //     message: "Discount price ({VALUE}) should be below regular price",
+    //   },
+    // },
+    // summary: {
+    //   type: String,
+    //   trim: true,
+    //   required: [true, "must provide the summary"],
+    // },
+    // description: {
+    //   type: String,
+    //   trim: true,
+    // },
+    // imageCover: {
+    //   type: String,
+    //   required: [true, "must provide the cover image"],
+    // },
+    // images: [String],
 
-    startDates: [Date],
-    secretNfts: {
-      type: Boolean,
-      default: false,
-    },
+    // startDates: [Date],
+    // secretNfts: {
+    //   type: Boolean,
+    //   default: false,
+    // },
   },
-  {
-    toJSON: { virtuals: true },
-    toObject: { virtuals: true },
-  }
+  // {
+  //   toJSON: { virtuals: true },
+  //   toObject: { virtuals: true },
+  // }
 );
 
 nftSchema.virtual("durationWeeks").get(function () {
