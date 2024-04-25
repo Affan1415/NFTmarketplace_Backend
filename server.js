@@ -1,29 +1,29 @@
 const dotenv = require("dotenv");
-// const mongoose = require("mongoose");
+const mongoose = require("mongoose");
 const app = require("./app");
+dotenv.config({ path: "./config.env" });
+//>>create the string and replace the password with actual
+const DB = process.env.DATABASE.replace(
+  "<PASSWORD>",
+  process.env.DATABASE_PASSWORD
+);
+//>>connecting database
+//>>connect mathod pass the database and used some methods in the mongoose
+mongoose
+  .connect(DB, {
+    useCreateIndex: true,
+    useFindAndModify: false,
+    useNewUrlParser: true,
+  })
+  .then((con) => {
+    //console.log(con.connection);
+    console.log("DB Connection Successfully");
+  });
 //>>enviornemnet variable
 //console.log(app.get("env"));
 //>>we have all the env in process.env dic name all the passwords blah blah
-dotenv.config({ path: "./config.env" });
+
 //console.log(process.env);
-// const DB = process.env.DATABASE.replace(
-//   "<PASSWORD>",
-//   process.env.DATABASE_PASSWORD
-// );
-
-// mongoose
-//   .connect(DB, {
-//     useCreateIndex: true,
-//     useFindAndModify: false,
-//     useNewUrlParser: true,
-//   })
-//   .then((con) => {
-//     // console.log(con.connection);
-//     console.log("DB Connection Successfully");
-//   });
-// // console.log(app.get("env"));
-// // console.log(process.env);
-
 // // const nftSchema = new mongoose.Schema({
 // //   name: {
 // //     type: String,
