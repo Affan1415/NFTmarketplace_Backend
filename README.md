@@ -13,3 +13,10 @@ npm start
 (production)
 npm install -g win-node-env(first install)
 npm run start:prod
+
+(thats how qwe going to import and delete the data)
+>>node nft-data/data/import-data.js
+(to import all data)
+>>node nft-data/data/import-data.js --import
+(to delete all data)
+>>node nft-data/data/import-data.js --delete
