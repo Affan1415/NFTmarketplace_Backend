@@ -20,3 +20,6 @@ npm run start:prod
 >>node nft-data/data/import-data.js --import
 (to delete all data)
 >>node nft-data/data/import-data.js --delete
+
+(every single nft has its URL called slug)
+>>npm i slugify

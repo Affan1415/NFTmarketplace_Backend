@@ -1,7 +1,7 @@
 
 //>>if we ever create any data or uplaod any data it will go throug this model
 const mongoose = require("mongoose");
-//const slugify = require("slugify");
+const slugify = require("slugify");
 //const validator = require("validator");
 
 const nftSchema = new mongoose.Schema(
@@ -15,7 +15,7 @@ const nftSchema = new mongoose.Schema(
       //minlength: [10, "nft must have 10 character"],
       // validate: [validator.isAlpha, "NFT name must only contain Characters"],
     },
-    // slug: String,
+    slug: String,
     duration: {
       type: String,
       required: [true, "must provide duration"],
@@ -102,18 +102,21 @@ const nftSchema = new mongoose.Schema(
 
 //MONGOOSE MIDDLEWARE
 
-//DOCUMNT MIDDLEWARE: runs before .save() or .create()
-// nftSchema.pre("save", function (next) {
-//   // console.log(this);
-//   this.slug = slugify(this.name, { lower: true });
-//   next();
-// });
-
+//DOCUMNT MIDDLEWARE:this pre hooks only runs before .save() or .create() the data nfts
+//>. prehook before data is saved
+nftSchema.pre("save", function (next) {
+  // console.log(this);
+  //>>every single nft has its URL called slug
+  //>>providing slug to te nft
+  this.slug = slugify(this.name, { lower: true });
+  next();
+});
+// //>>before the posthook
 // nftSchema.pre("save", function (next) {
 //   console.log("document will save....");
 //   next();
 // });
-
+// //>.post hook after data is saved
 // nftSchema.post("save", function (doc, next) {
 //   console.log(doc);
 //   next();
