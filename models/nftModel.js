@@ -77,6 +77,8 @@ const nftSchema = new mongoose.Schema(
     createdAt:{
       type: Date,
       default:Date.now(),
+      //>>hide it
+      select:false,
 
     },
 

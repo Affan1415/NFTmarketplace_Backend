@@ -1,3 +1,4 @@
+//>>here we have all the functionality of the api as the reuseable components
 class APIFeatures {
   constructor(query, queryString) {
     this.query = query;
