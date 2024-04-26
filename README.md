@@ -23,3 +23,6 @@ npm run start:prod
 
 (every single nft has its URL called slug)
 >>npm i slugify
+
+(npm packet utelize for validation)
+>>npm i validator
