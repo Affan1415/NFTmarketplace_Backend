@@ -84,10 +84,10 @@ const nftSchema = new mongoose.Schema(
 
 
     startDates: [Date],
-    // secretNfts: {
-    //   type: Boolean,
-    //   default: false,
-    // },
+    secretNfts: {
+      type: Boolean,
+      default: false,
+    },
   },
   //attaching virtual property
   {
@@ -96,9 +96,8 @@ const nftSchema = new mongoose.Schema(
   }
 );
 //>>virtual property : u dont want to store sudden data in db but u want it at the time of execution
- nftSchema.virtual("durationWeeks").get(function () {
-   return this.duration / 7;
- });
+nftSchema.virtual("durationWeeks").get(function () {
+   return this.duration / 7; });
 
 //MONGOOSE MIDDLEWARE
 
@@ -124,25 +123,27 @@ nftSchema.pre("save", function (next) {
 
 //QYERY MIDDLEWARE
 
-//---------pre
-// nftSchema.pre("find", function (next) {
-// nftSchema.pre(/^find/, function (next) {
-//   this.find({ secretNfts: { $ne: true } });
-//   this.start = Date.now();
-//   next();
-// });
-
+//---------prehook
+//>>cuz when ever we click get all nft so we have to filter out the data you dont want to show to others but to some specific members
+//nftSchema.pre("find", function (next) {
+//>>/^find/ apply on everything find methods
+nftSchema.pre(/^find/, function (next) {
+  this.find({ secretNfts: { $ne: true } });
+  this.start = Date.now();
+  next();
+});
+// //>>for rest of detele path findone
 // nftSchema.pre("findOne", function (next) {
 //   this.find({ secretNfts: { $ne: true } });
 //   next();
 // });
 
 //-----post
-// nftSchema.post(/^find/, function (doc, next) {
-//   console.log(`Query took time: ${Date.now() - this.start} times`);
-//   // console.log(doc);
-//   next();
-// });
+nftSchema.post(/^find/, function (doc, next) {
+  console.log(`Query took time: ${Date.now() - this.start} times`);
+  // console.log(doc);
+  next();
+});
 
 //AGGREATION MIDDLEWARE
 // nftSchema.pre("aggregate", function (next) {
