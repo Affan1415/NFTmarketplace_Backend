@@ -1,3 +1,225 @@
+
+const NFT = require("./../models/nftModel");
+const APIFeatures = require("./../Utils/apiFeatures");
+
+exports.aliasTopNFTs = (req, res, next) => {
+  req.query.limit = "5";
+  req.query.sort = "-ratingsAverage,price";
+  req.query.fields = "name,price,ratingsAverage,difficulty";
+  next();
+};
+
+exports.getAllNfts = async (req, res) => {
+  try {
+    const features = new APIFeatures(NFT.find(), req.query)
+      .filter()
+      .sort()
+      .limitFields()
+      .pagination();
+    const nfts = await features.query;
+
+    // /SEND QUERY
+    res.status(200).json({
+      status: "success",
+      results: nfts.length,
+      data: {
+        nfts,
+      },
+    });
+  } catch (error) {
+    res.status(404).json({
+      status: "fail",
+      message: error,
+    });
+  }
+};
+//POST METHOD
+exports.createNFT = async (req, res) => {
+  try {
+    const newNFT = await NFT.create(req.body);
+
+    res.status(201).json({
+      status: "success",
+      data: {
+        nft: newNFT,
+      },
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "fail",
+      message: error,
+    });
+  }
+};
+
+// GET SINGLE NFT
+exports.getSingleNFT = async (req, res) => {
+  try {
+    const nft = await NFT.findById(req.params.id);
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        nft,
+      },
+    });
+  } catch (error) {
+    res.status(404).json({
+      status: "fail",
+      message: error,
+    });
+  }
+};
+//PATCH METHOD
+exports.updateNFT = async (req, res) => {
+  try {
+    const nft = await NFT.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        nft,
+      },
+    });
+  } catch (error) {
+    res.status(404).json({
+      status: "fail",
+      message: error,
+    });
+  }
+};
+//DELET METHOD
+exports.deleteNFT = async (req, res) => {
+  try {
+    await NFT.findByIdAndDelete(req.params.id);
+    res.status(204).json({
+      status: "success",
+      data: null,
+    });
+  } catch (error) {
+    res.status(404).json({
+      status: "fail",
+      message: error,
+    });
+  }
+};
+
+// //Aggregation Pipeline
+//>>finding avg of different fields like avg of all nfts price and blah blah
+ exports.getNFTsStats = async (req, res) => {
+   try {
+    //>>aggregate moongoes method
+     const stats = await NFT.aggregate([
+      {
+        //>>match method in mongoes if we want to match some field
+        $match: { ratingsAverage: { $gte: 4.5 } },
+      },
+      {
+        //>>we can segregate the data in the form of group
+        $group: {
+          // _id: "$ratingsAverage",
+          //>>identifier _id pass  the thing on which we want the grouping
+          _id: { $toUpper: "$difficulty" },
+          numNFT: { $sum: 1 },
+          numRatings: { $sum: "$ratingsQuantity" },
+          avgRating: { $avg: "$ratingsAverage" },
+          //>>will give the price of the entire nft
+          avgPrice: { $avg: "$price" },
+          minPrice: { $min: "$price" },
+          maxPrice: { $max: "$price" },
+        },
+      },
+      //>>this sort totally rely on group
+      {
+        $sort: { avgRating: 1 },
+      },
+      // {
+      //   $match: {
+      //     _id: { $ne: "EASY" },
+      //   },
+      // },
+    ]);
+    res.status(200).json({
+      status: "success",
+      data: {
+        stats,
+      },
+    });
+  } catch (error) {
+    res.status(404).json({
+      status: "fail",
+      message: error,
+    });
+  }
+};
+
+// //CALCULATING NUMBER OF NFT CREATE IN THE MONTH OR MONTHLY PLAN
+
+exports.getMonthlyPlan = async (req, res) => {
+  try {
+    const year = req.params.year * 1;
+    const plan = await NFT.aggregate([
+      {
+        //>>whatever property difiend in unwind it woill take it individualy
+        $unwind: "$startDates",
+      },
+      {
+        //>>match the year
+        $match: {
+          startDates: {
+            $gte: new Date(`${year}-01-01`),//first month
+            $lte: new Date(`${year}-12-31`),//to last month
+          },
+        },
+      },
+      {
+        //>>grouping on basis of month and showing no. of nfts on that typical month 
+        $group: {
+          _id: { $month: "$startDates" },
+          numNFTStarts: { $sum: 1 },
+          nfts: { $push: "$name" },
+        },
+      },
+      {
+        //>>to add the month number
+        $addFields: {
+          month: "$_id",
+        },
+      },
+      {
+        //>>hide the field
+        $project: {
+          _id: 0,
+        },
+      },
+      {
+        //>>sort
+        $sort: {
+          numNFTStarts: -1,
+        },
+      },
+      {
+        //>>number of results limited to display
+        $limit: 12,
+      },
+    ]);
+    res.status(200).json({
+      status: "success",
+      data: plan,
+    });
+  } catch (error) {
+    res.status(404).json({
+      status: "fail",
+      message: error,
+    });
+  }
+};
+
+
+
 // //>>comented this one bcz we no longer need our local data base
 // // const fs = require("fs");
 
@@ -503,221 +725,3 @@
 
 // PART 4 ------------------------------
 
-const NFT = require("./../models/nftModel");
-const APIFeatures = require("./../Utils/apiFeatures");
-
-exports.aliasTopNFTs = (req, res, next) => {
-  req.query.limit = "5";
-  req.query.sort = "-ratingsAverage,price";
-  req.query.fields = "name,price,ratingsAverage,difficulty";
-  next();
-};
-
-exports.getAllNfts = async (req, res) => {
-  try {
-    const features = new APIFeatures(NFT.find(), req.query)
-      .filter()
-      .sort()
-      .limitFields()
-      .pagination();
-    const nfts = await features.query;
-
-    // /SEND QUERY
-    res.status(200).json({
-      status: "success",
-      results: nfts.length,
-      data: {
-        nfts,
-      },
-    });
-  } catch (error) {
-    res.status(404).json({
-      status: "fail",
-      message: error,
-    });
-  }
-};
-//POST METHOD
-exports.createNFT = async (req, res) => {
-  try {
-    const newNFT = await NFT.create(req.body);
-
-    res.status(201).json({
-      status: "success",
-      data: {
-        nft: newNFT,
-      },
-    });
-  } catch (error) {
-    res.status(400).json({
-      status: "fail",
-      message: error,
-    });
-  }
-};
-
-// GET SINGLE NFT
-exports.getSingleNFT = async (req, res) => {
-  try {
-    const nft = await NFT.findById(req.params.id);
-
-    res.status(200).json({
-      status: "success",
-      data: {
-        nft,
-      },
-    });
-  } catch (error) {
-    res.status(404).json({
-      status: "fail",
-      message: error,
-    });
-  }
-};
-//PATCH METHOD
-exports.updateNFT = async (req, res) => {
-  try {
-    const nft = await NFT.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
-
-    res.status(200).json({
-      status: "success",
-      data: {
-        nft,
-      },
-    });
-  } catch (error) {
-    res.status(404).json({
-      status: "fail",
-      message: error,
-    });
-  }
-};
-//DELET METHOD
-exports.deleteNFT = async (req, res) => {
-  try {
-    await NFT.findByIdAndDelete(req.params.id);
-    res.status(204).json({
-      status: "success",
-      data: null,
-    });
-  } catch (error) {
-    res.status(404).json({
-      status: "fail",
-      message: error,
-    });
-  }
-};
-
-// //Aggregation Pipeline
-//>>finding avg of different fields like avg of all nfts price and blah blah
- exports.getNFTsStats = async (req, res) => {
-   try {
-    //>>aggregate moongoes method
-     const stats = await NFT.aggregate([
-      {
-        //>>match method in mongoes if we want to match some field
-        $match: { ratingsAverage: { $gte: 4.5 } },
-      },
-      {
-        //>>we can segregate the data in the form of group
-        $group: {
-          // _id: "$ratingsAverage",
-          //>>identifier _id pass  the thing on which we want the grouping
-          _id: { $toUpper: "$difficulty" },
-          numNFT: { $sum: 1 },
-          numRatings: { $sum: "$ratingsQuantity" },
-          avgRating: { $avg: "$ratingsAverage" },
-          //>>will give the price of the entire nft
-          avgPrice: { $avg: "$price" },
-          minPrice: { $min: "$price" },
-          maxPrice: { $max: "$price" },
-        },
-      },
-      //>>this sort totally rely on group
-      {
-        $sort: { avgRating: 1 },
-      },
-      // {
-      //   $match: {
-      //     _id: { $ne: "EASY" },
-      //   },
-      // },
-    ]);
-    res.status(200).json({
-      status: "success",
-      data: {
-        stats,
-      },
-    });
-  } catch (error) {
-    res.status(404).json({
-      status: "fail",
-      message: error,
-    });
-  }
-};
-
-// //CALCULATING NUMBER OF NFT CREATE IN THE MONTH OR MONTHLY PLAN
-
-exports.getMonthlyPlan = async (req, res) => {
-  try {
-    const year = req.params.year * 1;
-    const plan = await NFT.aggregate([
-      {
-        //>>whatever property difiend in unwind it woill take it individualy
-        $unwind: "$startDates",
-      },
-      {
-        //>>match the year
-        $match: {
-          startDates: {
-            $gte: new Date(`${year}-01-01`),//first month
-            $lte: new Date(`${year}-12-31`),//to last month
-          },
-        },
-      },
-      {
-        //>>grouping on basis of month and showing no. of nfts on that typical month 
-        $group: {
-          _id: { $month: "$startDates" },
-          numNFTStarts: { $sum: 1 },
-          nfts: { $push: "$name" },
-        },
-      },
-      {
-        //>>to add the month number
-        $addFields: {
-          month: "$_id",
-        },
-      },
-      {
-        //>>hide the field
-        $project: {
-          _id: 0,
-        },
-      },
-      {
-        //>>sort
-        $sort: {
-          numNFTStarts: -1,
-        },
-      },
-      {
-        //>>number of results limited to display
-        $limit: 12,
-      },
-    ]);
-    res.status(200).json({
-      status: "success",
-      data: plan,
-    });
-  } catch (error) {
-    res.status(404).json({
-      status: "fail",
-      message: error,
-    });
-  }
-};

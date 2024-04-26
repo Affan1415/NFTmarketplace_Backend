@@ -88,16 +88,17 @@ const nftSchema = new mongoose.Schema(
     //   type: Boolean,
     //   default: false,
     // },
+  },
+  //attaching virtual property
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   }
-  // {
-  //   toJSON: { virtuals: true },
-  //   toObject: { virtuals: true },
-  // }
 );
-
-// nftSchema.virtual("durationWeeks").get(function () {
-//   return this.duration / 7;
-// });
+//>>virtual property : u dont want to store sudden data in db but u want it at the time of execution
+ nftSchema.virtual("durationWeeks").get(function () {
+   return this.duration / 7;
+ });
 
 //MONGOOSE MIDDLEWARE
 
