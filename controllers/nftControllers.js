@@ -126,22 +126,28 @@ const NFT = require("./../models/nftModel");
 
 exports.getAllNfts = async (req, res) => {
   try {
+    //>>cant display the whole data so we use query(filter it)
     // //BUILD QUERY
-    // const queryObj = { ...req.query };
-    // const excludedFields = ["page", "sort", "limit", "fields"];
-    // excludedFields.forEach((el) => delete queryObj[el]);
+    //>>deconstructed the query ...
+    const queryObj = { ...req.query };
+    //>>first created the copy of queryobj and the excluding the queries
+    const excludedFields = ["page", "sort", "limit", "fields"];
+    excludedFields.forEach((el) => delete queryObj[el]);
     // // console.log(req.query, queryObj);
-
     // //ADVANCE FILTERING QUERY
-    // let queryStr = JSON.stringify(queryObj);
-    // queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
-    // // console.log(JSON.parse(queryStr));
-
-    // let query = NFT.find(JSON.parse(queryStr));
+     let queryStr = JSON.stringify(queryObj);
+     //>>replace func   'g' all that replace
+     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
+     //console.log(JSON.parse(queryStr));
+     //EXECUTE QUERY
+     //const query=NFT.find(queryObj);
+     const query=NFT.find(JSON.parse(queryStr));
+    //let query = NFT.find(JSON.parse(queryStr));
+    //gte getter in url
     // // {difficulty: "easy", duration: {$gte: 5}}
     // // { difficulty: 'easy', duration: { gte: '5' } }
     // // { difficulty: 'easy', duration: { '$gte': '5' } }
-
+    //const nfts=await NFT.find(queryObj);
     // //SORTING METHOD
     // if (req.query.sort) {
     //   const sortBy = req.query.sort.split(",").join(" ");
@@ -173,16 +179,16 @@ exports.getAllNfts = async (req, res) => {
     //   if (skip >= newNFTs) throw new Error("This page dosen't exist");
     // }
 
-    // const nfts = await query;
+    const nfts = await query;
 
-    // console.log(req.query);
-
+    //console.log(req.query);
+//>>predefined the queray 
     // const nfts = await NFT.find({
     //   difficulty: "easy",
     //   duration: 5,
     // });
-
-    const nfts = await NFT.find()
+//>>another way
+    //const nfts = await NFT.find()
     //   .where("duration")
     //   .equals(5)
     //   .where("difficulty")
