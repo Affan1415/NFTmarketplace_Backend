@@ -662,55 +662,62 @@ exports.deleteNFT = async (req, res) => {
 
 // //CALCULATING NUMBER OF NFT CREATE IN THE MONTH OR MONTHLY PLAN
 
-// exports.getMonthlyPlan = async (req, res) => {
-//   try {
-//     const year = req.params.year * 1;
-//     const plan = await NFT.aggregate([
-//       {
-//         $unwind: "$startDates",
-//       },
-//       {
-//         $match: {
-//           startDates: {
-//             $gte: new Date(`${year}-01-01`),
-//             $lte: new Date(`${year}-12-31`),
-//           },
-//         },
-//       },
-//       {
-//         $group: {
-//           _id: { $month: "$startDates" },
-//           numNFTStarts: { $sum: 1 },
-//           nfts: { $push: "$name" },
-//         },
-//       },
-//       {
-//         $addFields: {
-//           month: "$_id",
-//         },
-//       },
-//       {
-//         $project: {
-//           _id: 0,
-//         },
-//       },
-//       {
-//         $sort: {
-//           numNFTStarts: -1,
-//         },
-//       },
-//       {
-//         $limit: 12,
-//       },
-//     ]);
-//     res.status(200).json({
-//       status: "success",
-//       data: plan,
-//     });
-//   } catch (error) {
-//     res.status(404).json({
-//       status: "fail",
-//       message: error,
-//     });
-//   }
-// };
+exports.getMonthlyPlan = async (req, res) => {
+  try {
+    const year = req.params.year * 1;
+    const plan = await NFT.aggregate([
+      {
+        //>>whatever property difiend in unwind it woill take it individualy
+        $unwind: "$startDates",
+      },
+      {
+        //>>match the year
+        $match: {
+          startDates: {
+            $gte: new Date(`${year}-01-01`),//first month
+            $lte: new Date(`${year}-12-31`),//to last month
+          },
+        },
+      },
+      {
+        //>>grouping on basis of month and showing no. of nfts on that typical month 
+        $group: {
+          _id: { $month: "$startDates" },
+          numNFTStarts: { $sum: 1 },
+          nfts: { $push: "$name" },
+        },
+      },
+      {
+        //>>to add the month number
+        $addFields: {
+          month: "$_id",
+        },
+      },
+      {
+        //>>hide the field
+        $project: {
+          _id: 0,
+        },
+      },
+      {
+        //>>sort
+        $sort: {
+          numNFTStarts: -1,
+        },
+      },
+      {
+        //>>number of results limited to display
+        $limit: 12,
+      },
+    ]);
+    res.status(200).json({
+      status: "success",
+      data: plan,
+    });
+  } catch (error) {
+    res.status(404).json({
+      status: "fail",
+      message: error,
+    });
+  }
+};

@@ -24,8 +24,8 @@ router
 //STATS ROUTE
 router.route("/nfts-stats").get(nftControllers.getNFTsStats);
 
-// //GET MONTHLY PLAN
-// router.route("/monthly-plan/:year").get(nftControllers.getMonthlyPlan);
+//GET MONTHLY PLAN
+router.route("/monthly-plan/:year").get(nftControllers.getMonthlyPlan);
 
 // //ROUTER NFTs
 router
