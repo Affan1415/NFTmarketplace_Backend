@@ -26,3 +26,9 @@ npm run start:prod
 
 (npm packet utelize for validation)
 >>npm i validator
+
+
+
+(tool to debug our api)
+>>nmp i ndb
+>>npm run debug
