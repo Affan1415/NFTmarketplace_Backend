@@ -21,8 +21,8 @@ router
   .route("/top-5-nfts")
   .get(nftControllers.aliasTopNFTs, nftControllers.getAllNfts);
 
-// //STATS ROUTE
-// router.route("/nfts-stats").get(nftControllers.getNFTsStats);
+//STATS ROUTE
+router.route("/nfts-stats").get(nftControllers.getNFTsStats);
 
 // //GET MONTHLY PLAN
 // router.route("/monthly-plan/:year").get(nftControllers.getMonthlyPlan);
