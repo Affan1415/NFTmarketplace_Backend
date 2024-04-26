@@ -146,11 +146,13 @@ nftSchema.post(/^find/, function (doc, next) {
 });
 
 //AGGREATION MIDDLEWARE
-// nftSchema.pre("aggregate", function (next) {
-//   this.pipeline().unshift({ $match: { secretNfts: { $ne: true } } });
-//   // console.log(this.pipeline());
-//   next();
-// });
+//>>excluding some calculated(aggregated) data of secret nfts too
+nftSchema.pre("aggregate", function (next) {
+  //unshift to remove (simple java)
+  this.pipeline().unshift({ $match: { secretNfts: { $ne: true } } });
+  // console.log(this.pipeline());
+  next();
+});
 
 const NFT = mongoose.model("NFT", nftSchema);
 
