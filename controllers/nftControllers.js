@@ -1,7 +1,7 @@
 
 const NFT = require("./../models/nftModel");
 const APIFeatures = require("./../Utils/apiFeatures");
-
+const catchAsync=require("../Utils/catchAsync");
 exports.aliasTopNFTs = (req, res, next) => {
   req.query.limit = "5";
   req.query.sort = "-ratingsAverage,price";
@@ -9,8 +9,8 @@ exports.aliasTopNFTs = (req, res, next) => {
   next();
 };
 
-exports.getAllNfts = async (req, res) => {
-  try {
+exports.getAllNfts =catchAsync(async (req, res) => {
+  //try {
     const features = new APIFeatures(NFT.find(), req.query)
       .filter()
       .sort()
@@ -26,35 +26,44 @@ exports.getAllNfts = async (req, res) => {
         nfts,
       },
     });
-  } catch (error) {
-    res.status(404).json({
-      status: "fail",
-      message: error,
-    });
-  }
-};
-//POST METHOD
-exports.createNFT = async (req, res) => {
-  try {
-    const newNFT = await NFT.create(req.body);
+  // } catch (error) {
+  //   res.status(404).json({
+  //     status: "fail",
+  //     message: error,
+  //   });
+  // }
+});
 
-    res.status(201).json({
-      status: "success",
-      data: {
-        nft: newNFT,
-      },
-    });
-  } catch (error) {
-    res.status(400).json({
-      status: "fail",
-      message: error,
-    });
-  }
-};
+//POST METHOD
+//anything goess wrong catched by catchasync
+exports.createNFT = catchAsync(async (req, res) => {
+  const newNFT = await NFT.create(req.body);
+  res.status(201).json({
+    status: "success",
+    data: {
+      nft: newNFT,
+    },
+  });
+  // try {
+  //   const newNFT = await NFT.create(req.body);
+
+  //   res.status(201).json({
+  //     status: "success",
+  //     data: {
+  //       nft: newNFT,
+  //     },
+  //   });
+  // } catch (error) {
+  //   res.status(400).json({
+  //     status: "fail",
+  //     message: error,
+  //   });
+  // }
+});
 
 // GET SINGLE NFT
-exports.getSingleNFT = async (req, res) => {
-  try {
+exports.getSingleNFT = catchAsync(async (req, res) => {
+//try {
     const nft = await NFT.findById(req.params.id);
 
     res.status(200).json({
@@ -63,16 +72,16 @@ exports.getSingleNFT = async (req, res) => {
         nft,
       },
     });
-  } catch (error) {
-    res.status(404).json({
-      status: "fail",
-      message: error,
-    });
-  }
-};
+  // } catch (error) {
+  //   res.status(404).json({
+  //     status: "fail",
+  //     message: error,
+  //   });
+  // }
+});
 //PATCH METHOD
-exports.updateNFT = async (req, res) => {
-  try {
+exports.updateNFT = catchAsync(async (req, res) => {
+ // try {
     const nft = await NFT.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
@@ -84,33 +93,33 @@ exports.updateNFT = async (req, res) => {
         nft,
       },
     });
-  } catch (error) {
-    res.status(404).json({
-      status: "fail",
-      message: error,
-    });
-  }
-};
+  // } catch (error) {
+  //   res.status(404).json({
+  //     status: "fail",
+  //     message: error,
+  //   });
+  // }
+});
 //DELET METHOD
-exports.deleteNFT = async (req, res) => {
-  try {
+exports.deleteNFT =catchAsync(async (req, res) => {
+ // try {
     await NFT.findByIdAndDelete(req.params.id);
     res.status(204).json({
       status: "success",
       data: null,
     });
-  } catch (error) {
-    res.status(404).json({
-      status: "fail",
-      message: error,
-    });
-  }
-};
+  // } catch (error) {
+  //   res.status(404).json({
+  //     status: "fail",
+  //     message: error,
+  //   });
+  // }
+});
 
 // //Aggregation Pipeline
 //>>finding avg of different fields like avg of all nfts price and blah blah
- exports.getNFTsStats = async (req, res) => {
-   try {
+ exports.getNFTsStats =catchAsync(async (req, res) => {
+ //  try {
     //>>aggregate moongoes method
      const stats = await NFT.aggregate([
       {
@@ -148,18 +157,18 @@ exports.deleteNFT = async (req, res) => {
         stats,
       },
     });
-  } catch (error) {
-    res.status(404).json({
-      status: "fail",
-      message: error,
-    });
-  }
-};
+  // } catch (error) {
+  //   res.status(404).json({
+  //     status: "fail",
+  //     message: error,
+  //   });
+  // }
+});
 
 // //CALCULATING NUMBER OF NFT CREATE IN THE MONTH OR MONTHLY PLAN
 
-exports.getMonthlyPlan = async (req, res) => {
-  try {
+exports.getMonthlyPlan =catchAsync(async (req, res) => {
+ // try {
     const year = req.params.year * 1;
     const plan = await NFT.aggregate([
       {
@@ -210,13 +219,13 @@ exports.getMonthlyPlan = async (req, res) => {
       status: "success",
       data: plan,
     });
-  } catch (error) {
-    res.status(404).json({
-      status: "fail",
-      message: error,
-    });
-  }
-};
+  // } catch (error) {
+  //   res.status(404).json({
+  //     status: "fail",
+  //     message: error,
+  //   });
+  // }
+});
 
 
 
