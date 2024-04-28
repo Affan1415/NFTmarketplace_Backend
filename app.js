@@ -29,6 +29,15 @@ app.use((req, res, next) => {
 app.use("/api/v1/nfts", nftsRouter);
 app.use("/api/v1/users", usersRouter);
 
+//>>non of the middleware above catch the request->Error middlesware
+//>>.all ->trigger for all the eror (*)means global
+app.all("*",(req,res)=> {
+  res.status(404).json({
+    status: "fail",
+    message:`Can't find ${req.originalUrl} on this server`,
+  });
+});
+
 module.exports = app;
 
 
