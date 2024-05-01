@@ -70,6 +70,10 @@ exports.protect=catchAsync(async(req,res,next)=>{
     const decoded=await promisify(jwt.verify)(token, process.env.JWT_SECRET);
     //console.log(decoded);
     //3 user exist(if the user delete the acc detelete the token as well)
+    const freshUser=await User.findOne(decoded.id);
+    if(!freshUser){
+        return next(new AppError("The User belonging to this token no longer exist",401));
+    }
     //4 change password(if password get change then the token change ass well)
     next();
 
