@@ -1,3 +1,4 @@
+const {promisify}=require("util");
 const jwt=require("jsonwebtoken");
 const User=require("./../models/userModel");
 const catchAsync=require("../Utils/catchAsync");
@@ -61,11 +62,13 @@ exports.protect=catchAsync(async(req,res,next)=>{
         token=req.headers.authorization.split(" ")[1];
         
     }
+    if(!token){
+        return next(new AppError("You are not logged in to get acces",401));
+    }
     //console.log(token);
     //2 validate taken
-    if(!token){
-        return next(new AppError("You are not logged in to get acces",404));
-    }
+    const decoded=await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+    //console.log(decoded);
     //3 user exist(if the user delete the acc detelete the token as well)
     //4 change password(if password get change then the token change ass well)
     next();

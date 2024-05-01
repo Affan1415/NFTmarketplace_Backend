@@ -38,6 +38,7 @@ const sendErrorPro=(err,res)=>{
 
 });
   }else{
+    console.log(err);
     res.status(500).json({
       status: "error",
       message: "Something went very wrong",
@@ -45,7 +46,8 @@ const sendErrorPro=(err,res)=>{
   }
 
 };
-
+const handleJWTError=()=>new AppError("Invalid token,Please log in again",401);
+const handelJWTExpiredError=()=>new AppError("Your Token got expire.Please login again",401);
 module.exports=(err,req,res,next)=>{
     err.statusCode= err.statusCode || 500;
     err.status=err.status || "error";
@@ -58,6 +60,8 @@ module.exports=(err,req,res,next)=>{
       if(error.name==="CastError") error=handleCastErrorDB(error);
       if(error.code===11000) error=handleDuplicateFieldsBD(error);
       if(error.name==="ValidationError")error=handleValidationError(error);
+      if(error.name==="JsonWebTokenError")error=handleJWTError();
+      if(error.name==="TokenExpiredError")error=handelJWTExpiredError();
 
 
       sendErrorPro(error,res);
