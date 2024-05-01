@@ -1,5 +1,6 @@
 const express = require("express");
 const nftControllers = require("./../controllers/nftControllers");
+const authController=require("../controllers/authController");
 //>>can import it this way too
 // const {
 //   getAllNfts,
@@ -30,7 +31,8 @@ router.route("/monthly-plan/:year").get(nftControllers.getMonthlyPlan);
 // //ROUTER NFTs
 router
   .route("/")
-  .get(nftControllers.getAllNfts)
+  //impliment first middleware then second
+  .get(authController.protect,nftControllers.getAllNfts)
   //>>we have to check if user providing all data before creating nft
   //.post(nftControllers.checkBody, nftControllers.createNFT);
   .post(nftControllers.createNFT);

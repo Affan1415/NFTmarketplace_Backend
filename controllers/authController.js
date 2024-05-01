@@ -52,3 +52,22 @@ exports.login=catchAsync(async(req,res,next)=>{
         token,
     });
 });
+
+//protecting data (keeping track if its login or logout)
+exports.protect=catchAsync(async(req,res,next)=>{
+    //1 check token
+    let token;
+    if(req.headers.authorization && req.headers.authorization.startsWith("Bearer")){
+        token=req.headers.authorization.split(" ")[1];
+        
+    }
+    //console.log(token);
+    //2 validate taken
+    if(!token){
+        return next(new AppError("You are not logged in to get acces",404));
+    }
+    //3 user exist(if the user delete the acc detelete the token as well)
+    //4 change password(if password get change then the token change ass well)
+    next();
+
+});
