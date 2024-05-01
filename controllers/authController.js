@@ -83,3 +83,15 @@ exports.protect=catchAsync(async(req,res,next)=>{
     next();
 
 });
+
+exports.restrictTo=(...roles)=>{
+    return(req,res,next)=>{
+        if(!roles.includes(req.user.role)){
+            return next(
+                new AppError("You have not access to delete the NFT",403)
+            );
+
+        }
+        next();
+    };
+};
