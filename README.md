@@ -36,3 +36,7 @@ npm run start:prod
 
 (tool for encryption of passwords)
 >>npm i bcryptjs
+
+
+(package to work on authetication)
+>>npm i jsonwebtoken
