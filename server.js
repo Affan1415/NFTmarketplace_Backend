@@ -1,6 +1,13 @@
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const app = require("./app");
+//>>the undefined things in url
+process.on("uncaughtException",(err)=>{
+  console.log("uncaughtException shutting down application");
+  console.log(err.name,err.message);
+  process.exit(1);
+
+});
 dotenv.config({ path: "./config.env" });
 //>>enviornemnet variable
 //console.log(app.get("env"));
@@ -79,3 +86,6 @@ process.on("unhandledRejection",(err)=>{
   });
 });
 //this is the change
+
+
+//console.log(D);
