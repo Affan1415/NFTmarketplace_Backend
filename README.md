@@ -32,3 +32,7 @@ npm run start:prod
 (tool to debug our api)
 >>nmp i ndb
 >>npm run debug
+
+
+(tool for encryption of passwords)
+>>npm i bcryptjs
