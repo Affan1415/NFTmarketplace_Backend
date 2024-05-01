@@ -26,12 +26,13 @@ const userSchema=new mongoose.Schema({
         validate:{
             //this work on save and not on find ,findone
             validator:function(el){
-                return el ==this.password //true
+                return el === this.password //true
             },
             message:"Password is not the same",
         },
 
     },
+    passwordChnagedAt: Date,
 
 });
 
@@ -50,6 +51,16 @@ userSchema.methods.correctPassword=function(
     userPassword
 ){
     return bcrypt.compare(candidatePassword,userPassword);
+};
+userSchema.methods.changedPasswordAfter=function(JWTTimestamp){
+    if(this.passwordChnagedAt){
+        //converting time in sec
+        const changedTimeStamp=parseInt(this.passwordChangedAt.getTime()/1000,10);
+        return JWTTimestamp<changedTimeStamp;
+        console.log(this.passwordChnagedAt,JWTTimestamp);
+    }
+    //return false by default
+    return false;
 };
 //>.build scehma
 const User=mongoose.model("User",userSchema);

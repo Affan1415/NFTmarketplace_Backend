@@ -12,15 +12,15 @@ const signToken=(id)=>{
 //Signup
 exports.signup=catchAsync(async(req,res,next)=>{
     //this way anonw crete the acc will become admin
-    //const newUser=await User.create(req.body);
+    const newUser=await User.create(req.body);
     //created the acc
-    const newUser= await User.create({
-        name: req.body.name,
-        email:req.body.email,
-        password:req.body.password,
-        passwordConfirm:req.body.passwordConfirm,
+    // const newUser= await User.create({
+    //     name: req.body.name,
+    //     email:req.body.email,
+    //     password:req.body.password,
+    //     passwordConfirm:req.body.passwordConfirm,
 
-    });
+    // });
     //straight login so creste the token
     const token=signToken(newUser._id);
 
@@ -70,11 +70,16 @@ exports.protect=catchAsync(async(req,res,next)=>{
     const decoded=await promisify(jwt.verify)(token, process.env.JWT_SECRET);
     //console.log(decoded);
     //3 user exist(if the user delete the acc detelete the token as well)
-    const freshUser=await User.findOne(decoded.id);
-    if(!freshUser){
+    const currentUser=await User.findById(decoded.id);
+    if(!currentUser){
         return next(new AppError("The User belonging to this token no longer exist",401));
     }
     //4 change password(if password get change then the token change ass well)
+    if(currentUser.changedPasswordAfter(decoded.iat)){
+        return next(new AppError("User recently changed the password",401));
+    }
+    //user will have access to protected data
+    req.user=currentUser;
     next();
 
 });
