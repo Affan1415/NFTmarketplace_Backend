@@ -23,7 +23,7 @@ mongoose
   .then((con) => {
     //console.log(con.connection);
     console.log("DB Connection Successfully");
-  });
+  });//.catch((err)=>console.log("ERROR"));
 
   //>>genral schema
 //>>using the method from moongoes for retriving the data from the user(moved to models)
@@ -65,9 +65,17 @@ mongoose
 //   });
 
 const port = process.env.PORT || 3000;
-app.listen(port, () => {
+const server= app.listen(port, () => {
   console.log(`App running on port ${port}....`);
 });
 
-
+//>>handelingg database error unhandel rejects
+process.on("unhandledRejection",(err)=>{
+  console.log(err.name,err.message);
+  console.log("unhandelRejectopn Shutting down application");
+  //>>set doen the entire server
+  server.close(()=>{
+    process.exit(1);
+  });
+});
 //this is the change
