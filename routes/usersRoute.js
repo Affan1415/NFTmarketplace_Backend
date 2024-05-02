@@ -9,7 +9,7 @@ router.post("/login", authController.login);
 
 router.post("/forgotPassowrd", authController.forgotPassowrd);
 router.patch("/resetPassowrd/:token", authController.resetPassowrd);
-
+router.patch("/updateMyPassword", authController.protect,authController.updatePassword);
 //ROUTERS USERS
 router
   .route("/")

@@ -11,6 +11,17 @@ const signToken=(id)=>{
         expiresIn: process.env.JWT_EXPIRES_IN,
     });
 };
+const createSendToken=(user,statusCode,res)=>{
+    const token=signToken(user._id);
+
+    res.status(statusCode).json({
+        status:"Success",
+        token,
+        data:{
+            user,
+        },
+    });
+};
 //Signup
 exports.signup=catchAsync(async(req,res,next)=>{
     //this way anonw crete the acc will become admin
@@ -24,15 +35,16 @@ exports.signup=catchAsync(async(req,res,next)=>{
 
     // });
     //straight login so creste the token
-    const token=signToken(newUser._id);
+    createSendToken(newUser,201,res);
+    // const token=signToken(newUser._id);
 
-    res.status(201).json({
-        status:"Success",
-        token,
-        data:{
-            user:newUser,
-        },
-    });
+    // res.status(201).json({
+    //     status:"Success",
+    //     token,
+    //     data:{
+    //         user:newUser,
+    //     },
+    // });
 });
 //login user
 exports.login=catchAsync(async(req,res,next)=>{
@@ -48,12 +60,13 @@ exports.login=catchAsync(async(req,res,next)=>{
         return next(new AppError("Incorrect email and password",401));
     }
     //>>we have to send the token back cuz its imp for login and logpout
+    createSendToken(user,200,res);
 
-    const token=signToken(user.id);
-    res.status(200).json({
-        status:"sucess",
-        token,
-    });
+    // const token=signToken(user.id);
+    // res.status(200).json({
+    //     status:"sucess",
+    //     token,
+    // });
 });
 
 //protecting data (keeping track if its login or logout)
@@ -157,9 +170,27 @@ exports.resetPassowrd=async(req,res,next)=>{
     user.passwordResetExpires=undefined;
     await user.save();
 //log the user in,send jwt
-    const token=signToken(user.id);
-    res.status(200).json({
-        status:"sucess",
-        token,
-    });
+    createSendToken(user,200,res);
+    // const token=signToken(user.id);
+    // res.status(200).json({
+    //     status:"sucess",
+    //     token,
+    // });
 };
+
+//--update password
+exports.updatePassword=catchAsync(async(req,res,next)=>{
+    //get the user from the collection of data
+    const user=await User.findById(req.user.id).select("+password");
+    //check if the posted cureent password is correct
+    if(!(await user.correctPassword(req.body.passwordCurrent,user.password))){
+        return next(new AppError("Your current password is wrong",401));
+    }
+    //if so update te password
+    user.password =req.body.password;
+    user.passwordConfirm=req.body.passwordConfirm;
+    await user.save();
+    //log user after the password changed
+    createSendToken(user,200,res);
+    
+});
