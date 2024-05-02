@@ -1,0 +1,33 @@
+const nodemailer=require("nodemailer");
+const sendEmail= async(options)=>{
+//     //create a transporter
+//     const transporter=nodemailer.createTransport({
+//     service:process.env.EMAIL_HOST,
+//     port:process.env.EMAIL_PORT,
+//     auth:{
+//         host:process.env.EMAIL_USERNAME,
+//         pass:process.env.EMAIL_PASSWORD,
+//     },
+// });
+const transporter = nodemailer.createTransport({
+    host: 'smtp.ethereal.email',
+    port: 587,
+    auth: {
+        user: 'rowena.oberbrunner50@ethereal.email',
+        pass: 'U4ZjaYuW1SgfkDrBCE',
+    },
+});
+//define the email options
+const mailOptions={
+    from:"mahi shakeel <hello@mahi.com",
+    to:options.email,
+    subject:options.subject,
+    text:options.message,
+    //html
+};
+//active send eamil
+await transporter.sendMail(mailOptions);
+
+
+};
+module.exports=sendEmail;

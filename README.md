@@ -40,3 +40,6 @@ npm run start:prod
 
 (package to work on authetication)
 >>npm i jsonwebtoken
+
+(create acc at nodemailer and a new project and a new inbox and also makeacc in ethereal email copy the nodemailer configuration from there)
+>>npm i nodemailer
