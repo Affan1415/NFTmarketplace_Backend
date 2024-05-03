@@ -1,6 +1,6 @@
 const express = require("express");
 const morgan = require("morgan");
-
+const rateLimit=require("express-rate-limit");
 const AppError =require("./Utils/appError");
 const globalErrorHandler= require("./controllers/errorController");
 const nftsRouter = require("./routes/nftsRoute");
@@ -8,10 +8,21 @@ const usersRouter = require("./routes/usersRoute");
 
 const app = express();
 app.use(express.json());
+
+//Global middelwares
 //>>onli in the development variable
 // if (process.env.NODE_ENV === "development ") {
 //   app.use(morgan("dev"));
 // }
+const limiter=rateLimit({
+  //in 1 hour can make onli 100 requests
+  max:100,
+  windowMs:60*60*1000,
+  message:"too many requests from his IP,please try again in an hour",
+}
+);
+//"/api"bcz we want to tie it in every singel route
+app.use("/api",limiter);
 app.use(morgan("dev"));
 //SERVING TEMPLATE DEMO
 //>>serving static file thats way we can serve pur template too

@@ -43,3 +43,6 @@ npm run start:prod
 
 (create acc at nodemailer and a new project and a new inbox and also makeacc in ethereal email copy the nodemailer configuration from there)
 >>npm i nodemailer
+
+(seeting the rate limit how pany request a singel ip can make at ur api)
+>>npm i express-rate-limit
