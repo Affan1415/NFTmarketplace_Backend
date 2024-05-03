@@ -11,8 +11,18 @@ const signToken=(id)=>{
         expiresIn: process.env.JWT_EXPIRES_IN,
     });
 };
+//creating the cookie
 const createSendToken=(user,statusCode,res)=>{
     const token=signToken(user._id);
+    const cookieOptions={
+        espires:new Date(Date.now()+process.env.JWT_COOKIE_EXPIR_IN*24*60*60*1000),
+        //secure:true,
+        httpOnly:true,
+        
+    };
+    //if((process.env.NODE_ENV="production"))cookieOptions.secure=true;
+    res.cookie("jwt",token,cookieOptions);
+    user.password=undefined;
 
     res.status(statusCode).json({
         status:"Success",
