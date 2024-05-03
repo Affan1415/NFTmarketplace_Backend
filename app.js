@@ -4,6 +4,7 @@ const rateLimit=require("express-rate-limit");
 const helmet=require("helmet");
 const mongoSanitize=require("express-mongo-sanitize");
 const xss=require("xss-clean");
+const hpp=require("hpp");
 
 const AppError =require("./Utils/appError");
 const globalErrorHandler= require("./controllers/errorController");
@@ -21,6 +22,11 @@ app.use(xss());
 //middelware to set couple of properties in our header
 //secure header http
 app.use(helmet());
+
+//prevent parameter pollution
+app.use(hpp({
+  whitelist:["duration","difficulty","maxGroupSize","price","ratingsAverage","ratingsQuantity"],
+}));
 //Global middelwares
 //>>onli in the development variable
 // if (process.env.NODE_ENV === "development ") {

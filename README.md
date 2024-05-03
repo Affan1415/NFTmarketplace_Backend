@@ -54,3 +54,5 @@ npm run start:prod
 (to sanitize the data)
 >>npm i express-mongo-sanitize
 >>npm i xss-clean
+(manage prams)
+>>npm i hpp
