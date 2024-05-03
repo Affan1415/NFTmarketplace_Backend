@@ -41,6 +41,11 @@ const userSchema=new mongoose.Schema({
     passwordChnagedAt: Date,
     passwordResetToken: String,
     passwordResetExpires:Date,
+    active:{
+        type: Boolean,
+        default:true,
+        select:false,
+    },
 
 });
 //middleware to save the passwords
@@ -51,7 +56,11 @@ userSchema.pre("save",function(next){
     this.passwordChangedAt=Date.now()-1000;
     next();
 });
-
+//global find to find the accounts that aint deleted
+userSchema.pre(/^find/,function(next){
+    this.find({active :{$ne:false}});
+    next();
+});
 userSchema.pre("save",async function(next){
     //password modified
     if(!this.isModified("password"))return next();
