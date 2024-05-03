@@ -49,3 +49,8 @@ npm run start:prod
 
 (middelware to set couple of properties in our header)
 >>npm i helmet
+
+
+(to sanitize the data)
+>>npm i express-mongo-sanitize
+>>npm i xss-clean
