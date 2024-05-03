@@ -1,19 +1,24 @@
 const express = require("express");
 const morgan = require("morgan");
 const rateLimit=require("express-rate-limit");
+const helmet=require("helmet");
 const AppError =require("./Utils/appError");
 const globalErrorHandler= require("./controllers/errorController");
 const nftsRouter = require("./routes/nftsRoute");
 const usersRouter = require("./routes/usersRoute");
 
 const app = express();
-app.use(express.json());
-
+//data limit
+app.use(express.json({limit:"10kb"}));
+//middelware to set couple of properties in our header
+//secure header http
+app.use(helmet())
 //Global middelwares
 //>>onli in the development variable
 // if (process.env.NODE_ENV === "development ") {
 //   app.use(morgan("dev"));
 // }
+//rat elimit
 const limiter=rateLimit({
   //in 1 hour can make onli 100 requests
   max:100,
