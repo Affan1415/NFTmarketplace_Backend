@@ -75,11 +75,11 @@ const nftSchema = new mongoose.Schema(
     },
     //>>array of strinfg bcz one nft can have multiple images
     images: [String],
-    createdAt:{
+    createdAt: {
       type: Date,
-      default:Date.now(),
+      default: Date.now(),
       //>>hide it
-      select:false,
+      select: false,
 
     },
 
@@ -98,7 +98,8 @@ const nftSchema = new mongoose.Schema(
 );
 //>>virtual property : u dont want to store sudden data in db but u want it at the time of execution
 nftSchema.virtual("durationWeeks").get(function () {
-   return this.duration / 7; });
+  return this.duration / 7;
+});
 
 //MONGOOSE MIDDLEWARE
 
