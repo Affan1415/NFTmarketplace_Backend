@@ -58,12 +58,22 @@ exports.createUser = (req, res) => {
   });
 };
 
-exports.getSingleUser = (req, res) => {
-  res.status(500).json({
-    status: "error",
-    message: "Internal server error",
+exports.getSingleUser = catchAsync(async (req, res, next) => {
+  // Assuming the user's role is stored in the database field named "role"
+  const user = await User.findById(req.params.id).select('name email role');
+
+  if (!user) {
+    return next(new AppError("No user found with that ID", 404));
+  }
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      user,
+    },
   });
-};
+});
+
 
 exports.updateUser = (req, res) => {
   res.status(500).json({

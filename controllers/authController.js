@@ -136,9 +136,9 @@ exports.forgotPassowrd=catchAsync(async(req,res,next)=>{
     await user.save({validateBeforeSave:false});
 
     //3 send email back to the user
-    const resetURL=`${req.protocol}://${req.get("host")}/api/v1/users/resetPassowrd/${resetToken}`;
+    const resetURL=`http://localhost:3001/resetpass`;
 
-    const message=`Forget your password Submit a PATCH request with your new password and confirm password to:${resetURL}.\n if didnt forget your password please ignore this email`;
+    const message=`Forget your password Submit a PATCH request with your new password and confirm password and your secret key to:${resetURL}.\n if didnt forget your password please ignore this email \n your secret key is ${resetToken}`;
     try{
         await sendEmail({
             email:user.email,
