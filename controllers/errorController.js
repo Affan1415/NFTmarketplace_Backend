@@ -46,4 +46,7 @@ const sendErrorPro=(err,res)=>{
   }
 
 };
+const handleJWTError=()=>new AppError("Invalid token,Please log in again",401);
+const handelJWTExpiredError=()=>new AppError("Your Token got expire.Please login again",401);
+
 
