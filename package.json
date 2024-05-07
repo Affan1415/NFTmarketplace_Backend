@@ -4,14 +4,15 @@
   "description": "this is general api, then converted to nft marketplace api",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_ENV=development nodemon server.js",
-    "prod": "NODE_ENV=production nodemon server.js",
+    "start": "set NODE_ENV=development && nodemon server.js",
+    "prod": "set NODE_ENV=production && nodemon server.js",
     "debug": "ndb server.js"
   },
   "author": "daulat hussain",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.2",
     "express": "^4.19.2",
     "express-mongo-sanitize": "^2.2.0",

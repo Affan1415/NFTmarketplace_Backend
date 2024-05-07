@@ -13,13 +13,13 @@ const transporter = nodemailer.createTransport({
     host: 'smtp.ethereal.email',
     port: 587,
     auth: {
-        user: 'sunny.wunsch@ethereal.email',
-        pass: 'dbRPMZMtqfBFdVFrpD',
-    },
+        user: 'hubert.konopelski@ethereal.email',
+        pass: 'kGrWhrFUTb9pHgUmSN'
+    }
 });
 //define the email options
 const mailOptions={
-    from:"mahi shakeel <hello@mahi.com",
+    from:"affan <affanzahir19@gmail.com>",
     to:options.email,
     subject:options.subject,
     text:options.message,

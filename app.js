@@ -5,11 +5,13 @@ const helmet=require("helmet");
 const mongoSanitize=require("express-mongo-sanitize");
 const xss=require("xss-clean");
 const hpp=require("hpp");
+const cors = require("cors");
 
 const AppError =require("./Utils/appError");
 const globalErrorHandler= require("./controllers/errorController");
 const nftsRouter = require("./routes/nftsRoute");
 const usersRouter = require("./routes/usersRoute");
+const contactUsRoutes = require('./routes/contactUsRoutes');
 
 const app = express();
 //data limit
@@ -22,6 +24,10 @@ app.use(xss());
 //middelware to set couple of properties in our header
 //secure header http
 app.use(helmet());
+
+app.use(cors({
+  origin: "*" // Replace with your frontend origin
+}));
 
 //prevent parameter pollution
 app.use(hpp({
@@ -61,6 +67,7 @@ app.use((req, res, next) => {
 
 app.use("/api/v1/nfts", nftsRouter);
 app.use("/api/v1/users", usersRouter);
+app.use('/api/v1/contact', contactUsRoutes);
 
 //>>non of the middleware above catch the request->Error middlesware
 //>>.all ->trigger for all the eror (*)means global
