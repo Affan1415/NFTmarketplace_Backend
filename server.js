@@ -79,14 +79,7 @@ const server= app.listen(port, () => {
 });
 
 //>>handelingg database error unhandel rejects
-process.on("unhandledRejection",(err)=>{
-  console.log(err.name,err.message);
-  console.log("unhandelRejectopn Shutting down application");
-  //>>set doen the entire server
-  server.close(()=>{
-    process.exit(1);
-  });
-});
+
 //this is the change
 
 
