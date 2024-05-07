@@ -20,3 +20,13 @@ const handleValidationError=(err)=>{
   return new AppError(message,400);
 
 };
+const sendErrorDev=(err,res)=>{
+  res.status(err.statusCode).json({
+    status: err.status,
+    message: err.message,
+    error:err,
+    stack:err.stack,
+
+});
+
+};
