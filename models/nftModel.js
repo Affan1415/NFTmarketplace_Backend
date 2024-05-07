@@ -3,6 +3,98 @@
 const mongoose = require("mongoose");
 const slugify = require("slugify");
 const validator = require("validator");
+const nftSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "A NFT must have a name"],
+      unique: true,
+      trim: true,
+      //>>to ignore the fazool ka data added by user
+      //>>validators
+      maxlength: [40, "nft must have 40 character"],
+      minlength: [10, "nft must have 10 character"],
+      //validate: [validator.isAlpha, "NFT name must only contain Characters"],
+    },
+    slug: String,
+    duration: {
+      type: String,
+      required: [true, "must provide duration"],
+    },
+    maxGroupSize: {
+      type: Number,
+      required: [true, "must have a group size"],
+    },
+    difficulty: {
+      type: String,
+      required: [true, "must have difficulty"],
+      enum: {
+        values: ["easy", "medium", "difficulty"],
+        message: "Difficulty is either: easy, medium and difficulty",
+      },
+    },
+    ratingsAverage: {
+      type: Number,
+      default: 4.5,
+      min: [1, "must have 1"],
+      max: [5, "must have 5"],
+    },
+    ratingsQuantity: {
+      type: Number,
+      default: 0,
+    },
+    price: {
+      type: Number,
+      required: [true, "A NFT must have price"],
+    },
+    priceDiscount: {
+      //THIS CAN ONLY WORK AT THE TIME OF CREATE not update
+      type: Number,
+      validate: {
+        validator: function (val) {
+          return val < this.price; // 200 > 100  20 < 100
+        },
+        message: "Discount price ({VALUE}) should be below regular price",
+      },
+    },
+    summary: {
+      type: String,
+      //>>trim so there is no unnessaru spaces
+      trim: true,
+      required: [true, "must provide the summary"],
+    },
+    description: {
+      type: String,
+      trim: true,
+    },
+    //>>take iamge as a string(name of the image)bcz its not good to load the image on db
+    imageCover: {
+      type: String,
+      required: [true, "must provide the cover image"],
+    },
+    //>>array of strinfg bcz one nft can have multiple images
+    images: [String],
+    createdAt: {
+      type: Date,
+      default: Date.now(),
+      //>>hide it
+      select: false,
+
+    },
+
+
+    startDates: [Date],
+    secretNfts: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  //attaching virtual property
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
+);
 
 //>>virtual property : u dont want to store sudden data in db but u want it at the time of execution
 nftSchema.virtual("durationWeeks").get(function () {
