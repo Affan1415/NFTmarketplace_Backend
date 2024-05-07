@@ -3,7 +3,6 @@
 const mongoose = require("mongoose");
 const slugify = require("slugify");
 const validator = require("validator");
-
 const nftSchema = new mongoose.Schema(
   {
     name: {
@@ -96,6 +95,7 @@ const nftSchema = new mongoose.Schema(
     toObject: { virtuals: true },
   }
 );
+
 //>>virtual property : u dont want to store sudden data in db but u want it at the time of execution
 nftSchema.virtual("durationWeeks").get(function () {
   return this.duration / 7;
