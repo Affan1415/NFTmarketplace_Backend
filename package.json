@@ -4,10 +4,9 @@
   "description": "this is general api, then converted to nft marketplace api",
   "main": "index.js",
   "scripts": {
-    "start": "set NODE_ENV=development && nodemon server.js",
+    "start": "node init && set NODE_ENV=development && nodemon server.js",
     "prod": "set NODE_ENV=production && nodemon server.js",
-    "debug": "ndb server.js",
-    "preinstall": "node dist/setup.js"
+    "debug": "ndb server.js"
   },
   "author": "daulat hussain",
   "license": "ISC",
